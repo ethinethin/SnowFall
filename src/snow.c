@@ -55,7 +55,8 @@ change_snowflakes(struct game *cur_game)
 		ALL_FLAKES[i].y += ALL_FLAKES[i].dy;
 		/* Did it fall off the screen? */
 		if (ALL_FLAKES[i].y > cur_game->display.h) {
-			ALL_FLAKES[i].y = -10;
+			ALL_FLAKES[i].x = rand_num(0, cur_game->display.w);
+			ALL_FLAKES[i].y = 0;
 		}
 		/* Change count and change dx if necessary */
 		ALL_FLAKES[i].count -= 1;
