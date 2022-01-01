@@ -10,7 +10,7 @@ void	init_disp(struct game *cur_game);
 void	kill_disp(struct game *cur_game);
 
 int
-main()
+main(int argc, char *argv[])
 {
 	SDL_Event event;
 	struct game cur_game = {
@@ -21,13 +21,19 @@ main()
 		NULL},			/* display.renderer */
 		SDL_FALSE		/* running */
 	};
-	
+	/* initialize snowflakes */
+	seed_rng();
+	if (argc == 4) {
+		init_snowflakes(&cur_game, atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+	} else if (argc == 1) {
+		init_snowflakes(&cur_game, 0, 0, 0);
+	} else {
+		printf("Usage:\n\t%s [number flakes] [horizontal speed] [vertical speed]\n", argv[0]);
+		exit(1);
+	}
 	/* Initialize SDL, seed rng, and initialize display */
 	SDL_Init(SDL_INIT_EVERYTHING);
-	seed_rng();
 	init_disp(&cur_game);
-	/* initialize snowflakes */
-	init_snowflakes(&cur_game);
 	/* Enter main loop */
 	while (cur_game.running == SDL_TRUE) {
 		/* Change and draw snowflakes */

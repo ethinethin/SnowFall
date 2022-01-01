@@ -3,7 +3,10 @@
 #include "rand.h"
 #include "snow.h"
 
-#define NUM_FLAKES 1000
+/* Default setup for snowflakes */
+int NUM_FLAKES = 1000;
+int HOR_SPEED = 1;
+int VER_SPEED = 1;
 
 /* Function prototypes */
 static void	draw_point(struct game *cur_game, int x, int y);
@@ -19,8 +22,13 @@ struct snowflake {
 struct snowflake *ALL_FLAKES = NULL;
 
 void
-init_snowflakes(struct game *cur_game)
+init_snowflakes(struct game *cur_game, int num_flakes, int hor_speed, int ver_speed)
 {
+	if (num_flakes != 0) {
+		NUM_FLAKES = num_flakes;
+		HOR_SPEED = hor_speed;
+		VER_SPEED = ver_speed;
+	}
 	ALL_FLAKES = malloc(sizeof(*ALL_FLAKES) * NUM_FLAKES);
 	int i;
 	int rando;
@@ -51,12 +59,13 @@ change_snowflakes(struct game *cur_game)
 	
 	for (i = 0; i < NUM_FLAKES; i += 1) {
 		/* Change coordinates */
-		ALL_FLAKES[i].x += ALL_FLAKES[i].dx;
-		ALL_FLAKES[i].y += ALL_FLAKES[i].dy;
+		ALL_FLAKES[i].x += ALL_FLAKES[i].dx * HOR_SPEED;
+		ALL_FLAKES[i].y += ALL_FLAKES[i].dy * VER_SPEED;
 		/* Did it fall off the screen? */
 		if (ALL_FLAKES[i].y > cur_game->display.h) {
 			ALL_FLAKES[i].x = rand_num(0, cur_game->display.w);
 			ALL_FLAKES[i].y = 0;
+			ALL_FLAKES[i].dy = rand_num(2, 4);
 		}
 		/* Change count and change dx if necessary */
 		ALL_FLAKES[i].count -= 1;
