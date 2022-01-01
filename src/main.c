@@ -25,10 +25,15 @@ main(int argc, char *argv[])
 	seed_rng();
 	if (argc == 4) {
 		init_snowflakes(&cur_game, atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
+	} else if (argc == 6) {
+		cur_game.display.w = atoi(argv[4]);
+		cur_game.display.h = atoi(argv[5]);
+		init_snowflakes(&cur_game, atoi(argv[1]), atoi(argv[2]), atoi(argv[3]));
 	} else if (argc == 1) {
 		init_snowflakes(&cur_game, 0, 0, 0);
 	} else {
 		printf("Usage:\n\t%s [number flakes] [horizontal speed] [vertical speed]\n", argv[0]);
+		printf("\t%s [number flakes] [horizontal speed] [vertical speed] [width] [height]\n", argv[0]);
 		exit(1);
 	}
 	/* Initialize SDL, seed rng, and initialize display */
